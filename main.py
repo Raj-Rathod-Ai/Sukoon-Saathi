@@ -4,13 +4,29 @@ from fastapi import FastAPI
 from pydantic import BaseModel, Field
 from typing import Literal
 from fastapi.middleware.cors import CORSMiddleware
+import os
+import sys
 
-model = joblib.load('Mental_Health_Model.pkl')
-top_countries = ['Other','India','USA','Canada','Australia','UK','Germany','Mexico','Turkey','France']
+# ── Load model with clear error reporting ─────────────────────
+MODEL_PATH = os.path.join(os.path.dirname(__file__), 'Mental_Health_Model.pkl')
+
+try:
+    model = joblib.load(MODEL_PATH)
+    print(f"✅ Model loaded successfully from: {MODEL_PATH}", flush=True)
+except FileNotFoundError:
+    print(f"❌ ERROR: Model file not found at: {MODEL_PATH}", flush=True)
+    print(f"   Working directory: {os.getcwd()}", flush=True)
+    print(f"   Files in directory: {os.listdir('.')}", flush=True)
+    sys.exit(1)
+except Exception as e:
+    print(f"❌ ERROR loading model: {e}", flush=True)
+    sys.exit(1)
+
+top_countries = ['Other', 'India', 'USA', 'Canada', 'Australia', 'UK', 'Germany', 'Mexico', 'Turkey', 'France']
 
 app = FastAPI(
     title="SukoonSaathi — Mental Health Score API",
-    description="ML-based student wellness prediction API. Predicts a mental health score based on academic, digital, lifestyle, and stress-related features.",
+    description="ML-based student wellness prediction API.",
     version="1.0.0"
 )
 
@@ -54,7 +70,7 @@ def root():
 # ── Prediction endpoint ───────────────────────────────────────
 @app.post("/predict", response_model=PredictionResponse)
 def predict(data: StudentData):
-    # Map country to top_countries bucket (same logic as training)
+    # Map country to training bucket
     country_mapped = data.country if data.country in top_countries else 'Other'
 
     input_dict = {
