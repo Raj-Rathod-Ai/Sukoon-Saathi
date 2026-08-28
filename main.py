@@ -70,23 +70,28 @@ def root():
 # ── Prediction endpoint ───────────────────────────────────────
 @app.post("/predict", response_model=PredictionResponse)
 def predict(data: StudentData):
-    # Map country to training bucket
-    country_mapped = data.country if data.country in top_countries else 'Other'
+    # Map country → group_countries (exactly as done in notebook Cell 28)
+    group_countries = data.country if data.country in top_countries else 'Other'
 
-    # ⚠️ CRITICAL: Column names must match training data exactly (Title_Case)
+    # Feature columns in EXACT order from notebook Cell 30:
+    # feature_col = skwewd_col + other_numeric_cols + ordinal_col + normal_col
+    # skwewd_col         = ['Study_Hours']
+    # other_numeric_cols = ['Age', 'Avg_Daily_Usage_Hours', 'Daily_Unlocks', 'Physical_Activity_Hours', 'Sleep_Hours_Per_Night']
+    # ordinal_col        = ['Stress_Level']
+    # normal_col         = ['Gender', 'Academic_Level', 'Most_Used_Platform', 'Purpose_Of_Use', 'group_countries']
     input_dict = {
+        'Study_Hours'             : [data.study_hours],
         'Age'                     : [data.age],
-        'Gender'                  : [data.gender],
-        'Country'                 : [country_mapped],
-        'Academic_Level'          : [data.academic_level],
-        'Most_Used_Platform'      : [data.most_used_platform],
-        'Purpose_Of_Use'          : [data.purpose_of_use],
         'Avg_Daily_Usage_Hours'   : [data.avg_daily_usage_hours],
         'Daily_Unlocks'           : [data.daily_unlocks],
-        'Study_Hours'             : [data.study_hours],
         'Physical_Activity_Hours' : [data.physical_activity_hours],
         'Sleep_Hours_Per_Night'   : [data.sleep_hours_per_night],
         'Stress_Level'            : [data.stress_level],
+        'Gender'                  : [data.gender],
+        'Academic_Level'          : [data.academic_level],
+        'Most_Used_Platform'      : [data.most_used_platform],
+        'Purpose_Of_Use'          : [data.purpose_of_use],
+        'group_countries'         : [group_countries],
     }
 
     df = pd.DataFrame(input_dict)
