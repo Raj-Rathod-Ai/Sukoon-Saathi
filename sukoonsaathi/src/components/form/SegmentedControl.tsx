@@ -48,9 +48,33 @@ export function SegmentedControl({ id, value, onChange, options, hasError }: Seg
               backgroundColor: isSelected ? 'var(--color-sage-light)' : 'var(--color-surface)',
               color: isSelected ? 'var(--color-sage-dark)' : 'var(--color-text-secondary)',
               cursor: 'pointer',
-              transition: 'all var(--transition-fast)',
+              transition: 'all 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
               outline: 'none',
               minHeight: '42px',
+              transform: isSelected ? 'scale(1.04)' : 'scale(1)',
+              boxShadow: isSelected
+                ? '0 3px 10px rgba(107, 143, 113, 0.25)'
+                : '0 1px 2px rgba(28, 28, 26, 0.03)',
+            }}
+            onMouseEnter={e => {
+              if (!isSelected) {
+                e.currentTarget.style.transform = 'translateY(-1px) scale(1.02)';
+                e.currentTarget.style.borderColor = 'var(--color-sage)';
+                e.currentTarget.style.boxShadow = '0 3px 8px rgba(107, 143, 113, 0.15)';
+              }
+            }}
+            onMouseLeave={e => {
+              if (!isSelected) {
+                e.currentTarget.style.transform = 'translateY(0) scale(1)';
+                e.currentTarget.style.borderColor = hasError ? '#A0522D' : 'var(--color-border)';
+                e.currentTarget.style.boxShadow = '0 1px 2px rgba(28, 28, 26, 0.03)';
+              }
+            }}
+            onMouseDown={e => {
+              e.currentTarget.style.transform = 'scale(0.96)';
+            }}
+            onMouseUp={e => {
+              e.currentTarget.style.transform = isSelected ? 'scale(1.04)' : 'scale(1)';
             }}
             onFocus={e => {
               if (!isSelected) {
@@ -61,7 +85,7 @@ export function SegmentedControl({ id, value, onChange, options, hasError }: Seg
             onBlur={e => {
               if (!isSelected) {
                 e.currentTarget.style.borderColor = hasError ? '#A0522D' : 'var(--color-border)';
-                e.currentTarget.style.boxShadow = 'none';
+                e.currentTarget.style.boxShadow = '0 1px 2px rgba(28, 28, 26, 0.03)';
               }
             }}
           >

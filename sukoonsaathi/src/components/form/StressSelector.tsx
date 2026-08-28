@@ -57,7 +57,7 @@ export function StressSelector({ value, onChange, hasError }: StressSelectorProp
                 : 'var(--color-surface)',
               color: isSelected ? 'var(--color-sage-dark)' : 'var(--color-text-secondary)',
               cursor: 'pointer',
-              transition: 'all var(--transition-fast)',
+              transition: 'all 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
               textAlign: 'center',
               display: 'flex',
               flexDirection: 'column',
@@ -66,6 +66,30 @@ export function StressSelector({ value, onChange, hasError }: StressSelectorProp
               outline: 'none',
               minHeight: '72px',
               justifyContent: 'center',
+              transform: isSelected ? 'scale(1.03)' : 'scale(1)',
+              boxShadow: isSelected
+                ? '0 4px 14px rgba(107, 143, 113, 0.2)'
+                : '0 1px 3px rgba(28, 28, 26, 0.04)',
+            }}
+            onMouseEnter={e => {
+              if (!isSelected) {
+                e.currentTarget.style.transform = 'translateY(-2px) scale(1.02)';
+                e.currentTarget.style.borderColor = 'var(--color-sage)';
+                e.currentTarget.style.boxShadow = '0 4px 12px rgba(107, 143, 113, 0.15)';
+              }
+            }}
+            onMouseLeave={e => {
+              if (!isSelected) {
+                e.currentTarget.style.transform = 'translateY(0) scale(1)';
+                e.currentTarget.style.borderColor = hasError ? '#A0522D' : 'var(--color-border)';
+                e.currentTarget.style.boxShadow = '0 1px 3px rgba(28, 28, 26, 0.04)';
+              }
+            }}
+            onMouseDown={e => {
+              e.currentTarget.style.transform = 'scale(0.96)';
+            }}
+            onMouseUp={e => {
+              e.currentTarget.style.transform = isSelected ? 'scale(1.03)' : 'scale(1)';
             }}
             onFocus={e => {
               if (!isSelected) {
@@ -76,11 +100,21 @@ export function StressSelector({ value, onChange, hasError }: StressSelectorProp
             onBlur={e => {
               if (!isSelected) {
                 e.currentTarget.style.borderColor = hasError ? '#A0522D' : 'var(--color-border)';
-                e.currentTarget.style.boxShadow = 'none';
+                e.currentTarget.style.boxShadow = '0 1px 3px rgba(28, 28, 26, 0.04)';
               }
             }}
           >
-            <span style={{ fontSize: '20px', lineHeight: 1 }} aria-hidden="true">{opt.emoji}</span>
+            <span
+              style={{
+                fontSize: '22px',
+                lineHeight: 1,
+                transform: isSelected ? 'scale(1.15)' : 'scale(1)',
+                transition: 'transform 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
+              }}
+              aria-hidden="true"
+            >
+              {opt.emoji}
+            </span>
             <span>{opt.label}</span>
           </button>
         );
