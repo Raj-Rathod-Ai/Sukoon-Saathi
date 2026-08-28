@@ -1,12 +1,12 @@
 // ============================================================
-//  SukoonSaathi — ResultSection
-//  Full result experience after successful prediction
+//  SukoonSaathi — ResultSection  (enhanced with score tiers)
 // ============================================================
 
 import type { StudentData } from '../../types';
 import { ScoreRing } from './ScoreRing';
 import { DailyRhythm } from './DailyRhythm';
 import { InputSummary } from './InputSummary';
+import { getScoreInsight } from '../../utils/scoreInsight';
 
 interface ResultSectionProps {
   score: number;
@@ -15,6 +15,8 @@ interface ResultSectionProps {
 }
 
 export function ResultSection({ score, formData, onReset }: ResultSectionProps) {
+  const insight = getScoreInsight(score);
+
   return (
     <div
       id="result-section"
@@ -25,7 +27,7 @@ export function ResultSection({ score, formData, onReset }: ResultSectionProps) 
         animation: 'fadeUp 0.5s ease forwards',
       }}
     >
-      {/* Score card */}
+      {/* ── Score card ─────────────────────────────────────────── */}
       <div
         style={{
           background: 'var(--color-surface)',
@@ -53,7 +55,7 @@ export function ResultSection({ score, formData, onReset }: ResultSectionProps) 
           </p>
           <h2
             style={{
-              fontSize: 'clamp(28px, 4vw, 38px)',
+              fontSize: 'clamp(26px, 4vw, 36px)',
               fontWeight: 800,
               letterSpacing: '-0.5px',
               color: 'var(--color-text)',
@@ -69,10 +71,80 @@ export function ResultSection({ score, formData, onReset }: ResultSectionProps) 
 
         {/* Score ring */}
         <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 'var(--space-xl)' }}>
-          <ScoreRing score={score} />
+          <ScoreRing score={score} tierColor={insight.color} />
         </div>
 
-        {/* Disclaimer inline */}
+        {/* ── Tier insight card ── */}
+        <div
+          style={{
+            background: insight.bgColor,
+            border: `1.5px solid ${insight.borderColor}`,
+            borderRadius: 'var(--radius-lg)',
+            padding: '20px 24px',
+            textAlign: 'left',
+            marginBottom: 'var(--space-lg)',
+            animation: 'fadeUp 0.5s ease 0.3s both',
+          }}
+        >
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '10px',
+              marginBottom: '10px',
+            }}
+          >
+            <span style={{ fontSize: '22px' }}>{insight.emoji}</span>
+            <span
+              style={{
+                fontSize: '15px',
+                fontWeight: 800,
+                color: insight.color,
+                letterSpacing: '-0.1px',
+              }}
+            >
+              {insight.headline}
+            </span>
+          </div>
+          <p
+            style={{
+              fontSize: '13px',
+              color: insight.color,
+              lineHeight: 1.65,
+              opacity: 0.9,
+            }}
+          >
+            {insight.message}
+          </p>
+
+          {/* Special celebration for 9+ */}
+          {score >= 9 && (
+            <div
+              style={{
+                marginTop: '14px',
+                paddingTop: '14px',
+                borderTop: `1px solid ${insight.borderColor}`,
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+              }}
+            >
+              <span style={{ fontSize: '16px' }}>🎉</span>
+              <span
+                style={{
+                  fontSize: '12px',
+                  fontWeight: 700,
+                  color: insight.color,
+                  letterSpacing: '0.04em',
+                }}
+              >
+                You're in the top wellness tier! Keep going — you're an inspiration.
+              </span>
+            </div>
+          )}
+        </div>
+
+        {/* Disclaimer */}
         <div
           style={{
             background: 'var(--color-beige)',
@@ -88,11 +160,13 @@ export function ResultSection({ score, formData, onReset }: ResultSectionProps) 
           <strong style={{ color: 'var(--color-accent)', display: 'block', marginBottom: '4px' }}>
             Important
           </strong>
-          This score is an informational ML estimate and should not be interpreted as a medical or psychological diagnosis. If you're concerned about your mental health, consider speaking with a qualified professional or someone you trust.
+          This score is an informational ML estimate and should not be interpreted as a medical or
+          psychological diagnosis. If you're concerned about your mental health, consider speaking
+          with a qualified professional or someone you trust.
         </div>
       </div>
 
-      {/* Daily Rhythm card */}
+      {/* ── Daily Rhythm card ─────────────────────────────────── */}
       <div
         style={{
           background: 'var(--color-surface)',
@@ -107,7 +181,7 @@ export function ResultSection({ score, formData, onReset }: ResultSectionProps) 
         <DailyRhythm data={formData} />
       </div>
 
-      {/* Input Summary card */}
+      {/* ── Input Summary card ────────────────────────────────── */}
       <div
         style={{
           background: 'var(--color-surface)',
@@ -122,7 +196,7 @@ export function ResultSection({ score, formData, onReset }: ResultSectionProps) 
         <InputSummary data={formData} />
       </div>
 
-      {/* Reset button */}
+      {/* ── Reset button ──────────────────────────────────────── */}
       <div style={{ display: 'flex', justifyContent: 'center' }}>
         <button
           id="reset-btn"
@@ -157,7 +231,13 @@ export function ResultSection({ score, formData, onReset }: ResultSectionProps) 
           }}
         >
           <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-            <path d="M11 7A4 4 0 1 1 7 3a4 4 0 0 1 3 1.35M11 3v2.35H8.65" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+            <path
+              d="M11 7A4 4 0 1 1 7 3a4 4 0 0 1 3 1.35M11 3v2.35H8.65"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
           </svg>
           Start a New Check
         </button>

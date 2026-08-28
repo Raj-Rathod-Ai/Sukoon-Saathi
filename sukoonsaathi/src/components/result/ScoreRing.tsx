@@ -6,8 +6,9 @@
 import { useEffect, useRef, useState } from 'react';
 
 interface ScoreRingProps {
-  score: number; // e.g. 6.78
+  score: number;
   maxScore?: number;
+  tierColor?: string;
 }
 
 const SIZE = 220;
@@ -15,7 +16,7 @@ const STROKE = 10;
 const RADIUS = (SIZE - STROKE * 2) / 2;
 const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
 
-export function ScoreRing({ score, maxScore = 10 }: ScoreRingProps) {
+export function ScoreRing({ score, maxScore = 10, tierColor = 'var(--color-sage)' }: ScoreRingProps) {
   const [displayScore, setDisplayScore] = useState(0);
   const [progress, setProgress] = useState(0);
   const animRef = useRef<number | null>(null);
@@ -91,7 +92,7 @@ export function ScoreRing({ score, maxScore = 10 }: ScoreRingProps) {
             cy={SIZE / 2}
             r={RADIUS}
             fill="none"
-            stroke="var(--color-sage)"
+            stroke={tierColor}
             strokeWidth={STROKE}
             strokeLinecap="round"
             strokeDasharray={CIRCUMFERENCE}
