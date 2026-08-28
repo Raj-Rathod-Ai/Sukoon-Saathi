@@ -7,7 +7,7 @@ from fastapi.middleware.cors import CORSMiddleware
 import os
 import sys
 
-# ── Load model with clear error reporting ─────────────────────
+# ── Load model ────────────────────────────────────────────────
 MODEL_PATH = os.path.join(os.path.dirname(__file__), 'Mental_Health_Model.pkl')
 
 try:
@@ -15,13 +15,13 @@ try:
     print(f"✅ Model loaded successfully from: {MODEL_PATH}", flush=True)
 except FileNotFoundError:
     print(f"❌ ERROR: Model file not found at: {MODEL_PATH}", flush=True)
-    print(f"   Working directory: {os.getcwd()}", flush=True)
     print(f"   Files in directory: {os.listdir('.')}", flush=True)
     sys.exit(1)
 except Exception as e:
     print(f"❌ ERROR loading model: {e}", flush=True)
     sys.exit(1)
 
+# Countries seen during training
 top_countries = ['Other', 'India', 'USA', 'Canada', 'Australia', 'UK', 'Germany', 'Mexico', 'Turkey', 'France']
 
 app = FastAPI(
@@ -73,19 +73,20 @@ def predict(data: StudentData):
     # Map country to training bucket
     country_mapped = data.country if data.country in top_countries else 'Other'
 
+    # ⚠️ CRITICAL: Column names must match training data exactly (Title_Case)
     input_dict = {
-        'age'                     : [data.age],
-        'gender'                  : [data.gender],
-        'country'                 : [country_mapped],
-        'academic_level'          : [data.academic_level],
-        'most_used_platform'      : [data.most_used_platform],
-        'purpose_of_use'          : [data.purpose_of_use],
-        'avg_daily_usage_hours'   : [data.avg_daily_usage_hours],
-        'daily_unlocks'           : [data.daily_unlocks],
-        'study_hours'             : [data.study_hours],
-        'physical_activity_hours' : [data.physical_activity_hours],
-        'sleep_hours_per_night'   : [data.sleep_hours_per_night],
-        'stress_level'            : [data.stress_level],
+        'Age'                     : [data.age],
+        'Gender'                  : [data.gender],
+        'Country'                 : [country_mapped],
+        'Academic_Level'          : [data.academic_level],
+        'Most_Used_Platform'      : [data.most_used_platform],
+        'Purpose_Of_Use'          : [data.purpose_of_use],
+        'Avg_Daily_Usage_Hours'   : [data.avg_daily_usage_hours],
+        'Daily_Unlocks'           : [data.daily_unlocks],
+        'Study_Hours'             : [data.study_hours],
+        'Physical_Activity_Hours' : [data.physical_activity_hours],
+        'Sleep_Hours_Per_Night'   : [data.sleep_hours_per_night],
+        'Stress_Level'            : [data.stress_level],
     }
 
     df = pd.DataFrame(input_dict)
