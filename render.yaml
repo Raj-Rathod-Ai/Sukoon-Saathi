@@ -20,7 +20,6 @@ services:
   - type: web
     name: sukoonsaathi-frontend
     env: static
-    plan: free
     rootDir: sukoonsaathi
     buildCommand: npm install && npm run build
     staticPublishPath: ./dist
