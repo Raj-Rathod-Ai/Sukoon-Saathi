@@ -4,7 +4,7 @@
 //  HEADER → HERO → INTRO → FORM (01→02→03) → RESULT → FOOTER
 // ============================================================
 
-import { useState, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react';
 import type { StudentData, FormErrors, PredictionResult } from './types';
 import { predictWellness, ApiError } from './services/predictionApi';
 import { validateForm, hasErrors } from './utils/validation';
@@ -55,6 +55,22 @@ export default function App() {
   // Refs for smooth scrolling
   const formRef = useRef<HTMLDivElement>(null);
   const resultRef = useRef<HTMLDivElement>(null);
+
+  // ── Keep-alive: ping backend every 14 min so Render free tier stays awake ──
+  useEffect(() => {
+    const PING_URL = 'https://sukoonsaathi-backend.onrender.com/health';
+    const INTERVAL_MS = 14 * 60 * 1000; // 14 minutes
+
+    const ping = () => {
+      fetch(PING_URL, { method: 'GET' })
+        .then(() => console.log('[SukoonSaathi] Keep-alive ping sent'))
+        .catch(() => console.warn('[SukoonSaathi] Keep-alive ping failed (server may be starting)'));
+    };
+
+    ping(); // ping immediately on load
+    const timer = setInterval(ping, INTERVAL_MS);
+    return () => clearInterval(timer);
+  }, []);
 
   // ── Determine which progress step is active (for indicator) ──
   const getActiveStep = (): number => {
