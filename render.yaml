@@ -9,25 +9,23 @@ services:
   # ── Backend: FastAPI ML Inference API ──────────────────────
   - type: web
     name: sukoonsaathi-backend
-    runtime: python
+    env: python
     plan: free
-    # Root is the repo root (where main.py + .pkl live)
     buildCommand: pip install -r requirements.txt
     startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
     healthCheckPath: /
     autoDeploy: true
 
   # ── Frontend: React + Vite Static Site ─────────────────────
-  - type: static
+  - type: web
     name: sukoonsaathi-frontend
+    env: static
     plan: free
-    # Root is the sukoonsaathi/ subfolder
     rootDir: sukoonsaathi
     buildCommand: npm install && npm run build
     staticPublishPath: ./dist
     autoDeploy: true
     routes:
-      # SPA fallback — all routes serve index.html
       - type: rewrite
         source: /*
         destination: /index.html
