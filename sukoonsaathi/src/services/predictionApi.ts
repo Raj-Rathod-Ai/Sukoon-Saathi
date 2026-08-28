@@ -5,7 +5,7 @@
 
 import type { StudentData, PredictionResult } from '../types';
 
-const API_URL = 'https://mansik-santulan-score-1.onrender.com';
+const API_URL = 'https://sukoonsaathi-backend.onrender.com';
 
 export class ApiError extends Error {
   public statusCode?: number;

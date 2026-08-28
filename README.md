@@ -17,7 +17,7 @@
 
 **An end-to-end ML system** — from raw survey data through feature engineering, model training, and production-ready FastAPI inference — that predicts a personalized student wellness signal from behavioral, academic, digital, and lifestyle features.
 
-[🌐 Live Demo](https://mansik-santulan-score-1.onrender.com) · [📊 API Docs](https://mansik-santulan-score-1.onrender.com/docs) · [📓 Notebook](Mental_Health.ipynb)
+[🌐 Live Demo](https://sukoonsaathi-frontend.onrender.com) · [📊 API Docs](https://sukoonsaathi-backend.onrender.com/docs) · [📓 Notebook](Mental_Health.ipynb)
 
 </div>
 
