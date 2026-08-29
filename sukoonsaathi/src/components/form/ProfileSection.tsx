@@ -7,7 +7,7 @@ import { FormField } from './FormField';
 import { NumberInput } from './NumberInput';
 import { SegmentedControl } from './SegmentedControl';
 import { SelectInput } from './SelectInput';
-import { COUNTRY_OPTIONS } from '../../constants/countries';
+import { COUNTRY_GROUPS, COUNTRY_OPTIONS } from '../../constants/countries';
 
 interface ProfileSectionProps {
   data: Partial<StudentData>;
@@ -20,7 +20,8 @@ const SECTION_STYLE: React.CSSProperties = {
   border: '1px solid var(--color-border)',
   borderRadius: 'var(--radius-xl)',
   padding: 'var(--space-2xl)',
-  boxShadow: 'var(--shadow-xs)',
+  boxShadow: '0 4px 20px rgba(28, 28, 26, 0.04)',
+  transition: 'box-shadow 0.3s ease, border-color 0.3s ease',
 };
 
 const GRID_2: React.CSSProperties = {
@@ -31,20 +32,36 @@ const GRID_2: React.CSSProperties = {
 
 export function ProfileSection({ data, errors, onChange }: ProfileSectionProps) {
   return (
-    <div style={SECTION_STYLE}>
+    <div style={SECTION_STYLE} className="form-section-card">
       {/* Section header */}
       <div style={{ marginBottom: 'var(--space-xl)' }}>
-        <div
-          style={{
-            fontSize: '11px',
-            fontWeight: 700,
-            letterSpacing: '0.12em',
-            textTransform: 'uppercase',
-            color: 'var(--color-sage)',
-            marginBottom: '6px',
-          }}
-        >
-          01
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
+          <span
+            style={{
+              fontSize: '11px',
+              fontWeight: 800,
+              letterSpacing: '0.1em',
+              textTransform: 'uppercase',
+              color: 'var(--color-sage-dark)',
+              backgroundColor: 'var(--color-sage-light)',
+              padding: '3px 9px',
+              borderRadius: 'var(--radius-full)',
+              display: 'inline-block',
+            }}
+          >
+            01
+          </span>
+          <span
+            style={{
+              fontSize: '12px',
+              fontWeight: 700,
+              color: 'var(--color-sage)',
+              letterSpacing: '0.04em',
+              textTransform: 'uppercase',
+            }}
+          >
+            Profile Basics
+          </span>
         </div>
         <h2
           style={{
@@ -57,8 +74,8 @@ export function ProfileSection({ data, errors, onChange }: ProfileSectionProps) 
         >
           About you
         </h2>
-        <p style={{ fontSize: '14px', color: 'var(--color-text-secondary)' }}>
-          A little context helps us understand your routine.
+        <p style={{ fontSize: '14px', color: 'var(--color-text-secondary)', lineHeight: 1.5 }}>
+          A little context helps the machine learning model understand your daily routine.
         </p>
       </div>
 
@@ -94,7 +111,7 @@ export function ProfileSection({ data, errors, onChange }: ProfileSectionProps) 
           </FormField>
         </div>
 
-        {/* Country — Select menu */}
+        {/* Country — Select menu with Groups */}
         <FormField
           label="Country"
           htmlFor="country"
@@ -107,7 +124,8 @@ export function ProfileSection({ data, errors, onChange }: ProfileSectionProps) 
             value={data.country ?? ''}
             onChange={val => onChange('country', val)}
             options={COUNTRY_OPTIONS}
-            placeholder="Select a country..."
+            groups={COUNTRY_GROUPS}
+            placeholder="Select your country..."
             hasError={!!errors.country}
           />
         </FormField>

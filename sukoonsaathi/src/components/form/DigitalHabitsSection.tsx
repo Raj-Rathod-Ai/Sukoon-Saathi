@@ -19,7 +19,8 @@ const SECTION_STYLE: React.CSSProperties = {
   border: '1px solid var(--color-border)',
   borderRadius: 'var(--radius-xl)',
   padding: 'var(--space-2xl)',
-  boxShadow: 'var(--shadow-xs)',
+  boxShadow: '0 4px 20px rgba(28, 28, 26, 0.04)',
+  transition: 'box-shadow 0.3s ease, border-color 0.3s ease',
 };
 
 const GRID_2: React.CSSProperties = {
@@ -29,14 +30,14 @@ const GRID_2: React.CSSProperties = {
 };
 
 const PLATFORMS = [
-  'Facebook', 'LinkedIn', 'Instagram', 'Snapchat', 'Twitter',
-  'YouTube', 'TikTok', 'LINE', 'KakaoTalk', 'VKontakte', 'WhatsApp', 'WeChat',
+  'Instagram', 'YouTube', 'LinkedIn', 'Twitter', 'TikTok', 'Snapchat',
+  'WhatsApp', 'Facebook', 'WeChat', 'LINE', 'KakaoTalk', 'VKontakte',
 ].map(p => ({ value: p, label: p }));
 
 const PURPOSES = [
-  { value: 'Networking', label: 'Networking' },
   { value: 'Education', label: 'Education' },
   { value: 'Entertainment', label: 'Entertainment' },
+  { value: 'Networking', label: 'Networking' },
   { value: 'News', label: 'News' },
 ];
 
@@ -48,20 +49,36 @@ const ACADEMIC_LEVELS = [
 
 export function DigitalHabitsSection({ data, errors, onChange }: DigitalHabitsSectionProps) {
   return (
-    <div style={SECTION_STYLE}>
+    <div style={SECTION_STYLE} className="form-section-card">
       {/* Section header */}
       <div style={{ marginBottom: 'var(--space-xl)' }}>
-        <div
-          style={{
-            fontSize: '11px',
-            fontWeight: 700,
-            letterSpacing: '0.12em',
-            textTransform: 'uppercase',
-            color: 'var(--color-sage)',
-            marginBottom: '6px',
-          }}
-        >
-          02
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
+          <span
+            style={{
+              fontSize: '11px',
+              fontWeight: 800,
+              letterSpacing: '0.1em',
+              textTransform: 'uppercase',
+              color: 'var(--color-sage-dark)',
+              backgroundColor: 'var(--color-sage-light)',
+              padding: '3px 9px',
+              borderRadius: 'var(--radius-full)',
+              display: 'inline-block',
+            }}
+          >
+            02
+          </span>
+          <span
+            style={{
+              fontSize: '12px',
+              fontWeight: 700,
+              color: 'var(--color-sage)',
+              letterSpacing: '0.04em',
+              textTransform: 'uppercase',
+            }}
+          >
+            Digital & Academic
+          </span>
         </div>
         <h2
           style={{
@@ -72,10 +89,10 @@ export function DigitalHabitsSection({ data, errors, onChange }: DigitalHabitsSe
             marginBottom: '6px',
           }}
         >
-          Your digital &amp; academic routine
+          Your daily screen & study habits
         </h2>
-        <p style={{ fontSize: '14px', color: 'var(--color-text-secondary)' }}>
-          Tell us how you usually spend your study and screen time.
+        <p style={{ fontSize: '14px', color: 'var(--color-text-secondary)', lineHeight: 1.5 }}>
+          Tell us how you spend your study time and digital media routine.
         </p>
       </div>
 
@@ -104,12 +121,12 @@ export function DigitalHabitsSection({ data, errors, onChange }: DigitalHabitsSe
               value={data.most_used_platform ?? ''}
               onChange={val => onChange('most_used_platform', val as StudentData['most_used_platform'])}
               options={PLATFORMS}
-              placeholder="Select platform"
+              placeholder="Select primary platform..."
               hasError={!!errors.most_used_platform}
             />
           </FormField>
 
-          <FormField label="Primary purpose" htmlFor="purpose-Networking" error={errors.purpose_of_use} required>
+          <FormField label="Primary purpose" htmlFor="purpose-Education" error={errors.purpose_of_use} required>
             <SegmentedControl
               id="purpose"
               value={data.purpose_of_use ?? ''}
@@ -126,7 +143,7 @@ export function DigitalHabitsSection({ data, errors, onChange }: DigitalHabitsSe
             label="Average daily screen time"
             htmlFor="avg-usage"
             error={errors.avg_daily_usage_hours}
-            helper="Approximate time on social platforms or digital media."
+            helper="Approximate hours on social platforms or digital media."
             required
           >
             <NumberInput
@@ -146,7 +163,7 @@ export function DigitalHabitsSection({ data, errors, onChange }: DigitalHabitsSe
             label="Daily phone unlocks"
             htmlFor="unlocks"
             error={errors.daily_unlocks}
-            helper="About how many times do you unlock your phone in a day?"
+            helper="About how many times do you unlock your phone per day?"
             required
           >
             <NumberInput

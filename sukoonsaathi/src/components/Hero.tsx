@@ -15,8 +15,24 @@ export function Hero({ onStart }: HeroProps) {
         background: 'linear-gradient(160deg, var(--color-bg) 0%, var(--color-bg-alt) 100%)',
         borderBottom: '1px solid var(--color-border)',
         padding: 'var(--space-4xl) var(--space-lg) var(--space-3xl)',
+        position: 'relative',
+        overflow: 'hidden',
       }}
     >
+      {/* Subtle background ambient radial glow */}
+      <div
+        style={{
+          position: 'absolute',
+          top: '-100px',
+          right: '-100px',
+          width: '500px',
+          height: '500px',
+          borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(232, 240, 233, 0.6) 0%, rgba(250, 249, 246, 0) 70%)',
+          pointerEvents: 'none',
+        }}
+      />
+
       <div
         style={{
           maxWidth: '1100px',
@@ -25,6 +41,8 @@ export function Hero({ onStart }: HeroProps) {
           alignItems: 'center',
           justifyContent: 'space-between',
           gap: 'var(--space-3xl)',
+          position: 'relative',
+          zIndex: 1,
         }}
         className="hero-inner"
       >
@@ -37,29 +55,32 @@ export function Hero({ onStart }: HeroProps) {
               alignItems: 'center',
               gap: '8px',
               fontSize: '11px',
-              fontWeight: 700,
+              fontWeight: 800,
               letterSpacing: '0.12em',
               textTransform: 'uppercase',
-              color: 'var(--color-sage)',
+              color: 'var(--color-sage-dark)',
+              backgroundColor: 'var(--color-sage-light)',
+              padding: '4px 12px',
+              borderRadius: 'var(--radius-full)',
               marginBottom: 'var(--space-lg)',
             }}
           >
             <span
               style={{
-                width: '24px',
-                height: '2px',
+                width: '6px',
+                height: '6px',
+                borderRadius: '50%',
                 backgroundColor: 'var(--color-sage)',
                 display: 'inline-block',
-                borderRadius: '2px',
               }}
             />
-            SukoonSaathi · Student Wellness Analytics
+            Student Wellness Analytics · ML Inference
           </div>
 
           {/* Main Heading */}
           <h1
             style={{
-              fontSize: 'clamp(36px, 5.5vw, 58px)',
+              fontSize: 'clamp(36px, 5.5vw, 56px)',
               fontWeight: 800,
               lineHeight: 1.12,
               letterSpacing: '-1px',
@@ -68,14 +89,14 @@ export function Hero({ onStart }: HeroProps) {
             }}
           >
             Apni daily routine<br />
-            <span style={{ color: 'var(--color-sage)' }}>ko samjho.</span>
+            <span style={{ color: 'var(--color-sage-dark)' }}>ko samjho.</span>
           </h1>
 
           {/* Subheading */}
           <p
             style={{
               fontSize: 'clamp(18px, 2.5vw, 22px)',
-              fontWeight: 500,
+              fontWeight: 600,
               color: 'var(--color-text-secondary)',
               marginBottom: 'var(--space-lg)',
               lineHeight: 1.45,
@@ -95,7 +116,7 @@ export function Hero({ onStart }: HeroProps) {
               maxWidth: '480px',
             }}
           >
-            Sleep, study, screen time, physical activity and stress — a few everyday patterns are used to generate an ML-based wellness signal.
+            Sleep, study, screen time, physical activity and stress — everyday lifestyle metrics processed through a trained Machine Learning model.
           </p>
 
           {/* Disclaimer */}
@@ -114,38 +135,38 @@ export function Hero({ onStart }: HeroProps) {
           <button
             id="hero-start-btn"
             onClick={onStart}
+            className="btn-interactive shimmer-effect"
             style={{
               display: 'inline-flex',
               alignItems: 'center',
-              gap: '8px',
+              gap: '10px',
               backgroundColor: 'var(--color-text)',
-              color: 'var(--color-bg)',
+              color: '#FFFFFF',
               fontFamily: 'var(--font-sans)',
               fontSize: '15px',
               fontWeight: 700,
-              padding: '14px 28px',
+              padding: '15px 32px',
               borderRadius: 'var(--radius-full)',
               border: 'none',
               cursor: 'pointer',
-              letterSpacing: '0.01em',
-              transition: 'background-color var(--transition-base), transform var(--transition-fast)',
+              letterSpacing: '0.02em',
+              boxShadow: '0 4px 16px rgba(28, 28, 26, 0.12)',
+              transition: 'all 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
             }}
             onMouseEnter={e => {
-              (e.currentTarget as HTMLButtonElement).style.backgroundColor = 'var(--color-sage-dark)';
+              const btn = e.currentTarget as HTMLButtonElement;
+              btn.style.backgroundColor = 'var(--color-sage-dark)';
+              btn.style.boxShadow = '0 8px 24px rgba(79, 112, 85, 0.3)';
             }}
             onMouseLeave={e => {
-              (e.currentTarget as HTMLButtonElement).style.backgroundColor = 'var(--color-text)';
-            }}
-            onMouseDown={e => {
-              (e.currentTarget as HTMLButtonElement).style.transform = 'scale(0.97)';
-            }}
-            onMouseUp={e => {
-              (e.currentTarget as HTMLButtonElement).style.transform = 'scale(1)';
+              const btn = e.currentTarget as HTMLButtonElement;
+              btn.style.backgroundColor = 'var(--color-text)';
+              btn.style.boxShadow = '0 4px 16px rgba(28, 28, 26, 0.12)';
             }}
           >
             Start Your Check
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-              <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+              <path d="M3.5 9h11M10 4.5L14.5 9 10 13.5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </button>
         </div>

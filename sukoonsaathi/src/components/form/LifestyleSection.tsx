@@ -18,7 +18,8 @@ const SECTION_STYLE: React.CSSProperties = {
   border: '1px solid var(--color-border)',
   borderRadius: 'var(--radius-xl)',
   padding: 'var(--space-2xl)',
-  boxShadow: 'var(--shadow-xs)',
+  boxShadow: '0 4px 20px rgba(28, 28, 26, 0.04)',
+  transition: 'box-shadow 0.3s ease, border-color 0.3s ease',
 };
 
 const GRID_3: React.CSSProperties = {
@@ -29,20 +30,36 @@ const GRID_3: React.CSSProperties = {
 
 export function LifestyleSection({ data, errors, onChange }: LifestyleSectionProps) {
   return (
-    <div style={SECTION_STYLE}>
+    <div style={SECTION_STYLE} className="form-section-card">
       {/* Section header */}
       <div style={{ marginBottom: 'var(--space-xl)' }}>
-        <div
-          style={{
-            fontSize: '11px',
-            fontWeight: 700,
-            letterSpacing: '0.12em',
-            textTransform: 'uppercase',
-            color: 'var(--color-sage)',
-            marginBottom: '6px',
-          }}
-        >
-          03
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
+          <span
+            style={{
+              fontSize: '11px',
+              fontWeight: 800,
+              letterSpacing: '0.1em',
+              textTransform: 'uppercase',
+              color: 'var(--color-sage-dark)',
+              backgroundColor: 'var(--color-sage-light)',
+              padding: '3px 9px',
+              borderRadius: 'var(--radius-full)',
+              display: 'inline-block',
+            }}
+          >
+            03
+          </span>
+          <span
+            style={{
+              fontSize: '12px',
+              fontWeight: 700,
+              color: 'var(--color-sage)',
+              letterSpacing: '0.04em',
+              textTransform: 'uppercase',
+            }}
+          >
+            Daily Rhythm & Balance
+          </span>
         </div>
         <h2
           style={{
@@ -53,10 +70,10 @@ export function LifestyleSection({ data, errors, onChange }: LifestyleSectionPro
             marginBottom: '6px',
           }}
         >
-          Your daily balance
+          Your daily balance & stress
         </h2>
-        <p style={{ fontSize: '14px', color: 'var(--color-text-secondary)' }}>
-          Sleep, movement and stress can provide important context.
+        <p style={{ fontSize: '14px', color: 'var(--color-text-secondary)', lineHeight: 1.5 }}>
+          Sleep, movement and self-reported stress provide the core wellness signal.
         </p>
       </div>
 
@@ -87,7 +104,7 @@ export function LifestyleSection({ data, errors, onChange }: LifestyleSectionPro
             label="Physical activity"
             htmlFor="activity-hours"
             error={errors.physical_activity_hours}
-            helper="Exercise, sports, walking, gym."
+            helper="Workout, sports, walking."
             required
           >
             <NumberInput
@@ -97,7 +114,7 @@ export function LifestyleSection({ data, errors, onChange }: LifestyleSectionPro
               min={0}
               max={24}
               step={0.5}
-              placeholder="e.g. 1"
+              placeholder="e.g. 1.5"
               hasError={!!errors.physical_activity_hours}
               unit="hrs/day"
             />
@@ -107,7 +124,7 @@ export function LifestyleSection({ data, errors, onChange }: LifestyleSectionPro
             label="Sleep per night"
             htmlFor="sleep-hours"
             error={errors.sleep_hours_per_night}
-            helper="How much do you usually sleep?"
+            helper="Average hours of sleep."
             required
           >
             <NumberInput
@@ -117,7 +134,7 @@ export function LifestyleSection({ data, errors, onChange }: LifestyleSectionPro
               min={0}
               max={24}
               step={0.5}
-              placeholder="e.g. 7"
+              placeholder="e.g. 7.5"
               hasError={!!errors.sleep_hours_per_night}
               unit="hrs/night"
             />
@@ -126,8 +143,9 @@ export function LifestyleSection({ data, errors, onChange }: LifestyleSectionPro
 
         {/* Stress level */}
         <FormField
-          label="Stress level kaisa rehta hai?"
+          label="Perceived stress level"
           error={errors.stress_level}
+          helper="How stressful does your routine feel overall?"
           required
         >
           <StressSelector

@@ -1,6 +1,9 @@
 // ============================================================
 //  SukoonSaathi — NumberInput
+//  Modern numeric input with unit badge & hover/focus glow
 // ============================================================
+
+import { useState } from 'react';
 
 interface NumberInputProps {
   id: string;
@@ -14,27 +17,26 @@ interface NumberInputProps {
   unit?: string;
 }
 
-const inputStyle = (hasError?: boolean): React.CSSProperties => ({
-  width: '100%',
-  padding: '12px 14px',
-  fontSize: '15px',
-  fontFamily: 'var(--font-sans)',
-  fontWeight: 500,
-  color: 'var(--color-text)',
-  backgroundColor: 'var(--color-surface)',
-  border: `1.5px solid ${hasError ? '#A0522D' : 'var(--color-border)'}`,
-  borderRadius: 'var(--radius-md)',
-  outline: 'none',
-  transition: 'border-color var(--transition-fast), box-shadow var(--transition-fast)',
-  appearance: 'none',
-  MozAppearance: 'textfield',
-});
-
 export function NumberInput({
-  id, value, onChange, min, max, step = 0.5, placeholder, hasError, unit,
+  id,
+  value,
+  onChange,
+  min,
+  max,
+  step = 0.5,
+  placeholder,
+  hasError,
+  unit,
 }: NumberInputProps) {
+  const [isFocused, setIsFocused] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
+
   return (
-    <div style={{ position: 'relative' }}>
+    <div
+      style={{ position: 'relative', width: '100%' }}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
       <input
         id={id}
         type="number"
@@ -52,18 +54,43 @@ export function NumberInput({
             if (!isNaN(parsed)) onChange(parsed);
           }
         }}
-        style={inputStyle(hasError)}
-        onFocus={e => {
-          e.currentTarget.style.borderColor = hasError ? '#A0522D' : 'var(--color-sage)';
-          e.currentTarget.style.boxShadow = hasError
-            ? '0 0 0 3px rgba(160,82,45,0.12)'
-            : '0 0 0 3px rgba(107,143,113,0.15)';
-        }}
-        onBlur={e => {
-          e.currentTarget.style.borderColor = hasError ? '#A0522D' : 'var(--color-border)';
-          e.currentTarget.style.boxShadow = 'none';
-        }}
+        onFocus={() => setIsFocused(true)}
+        onBlur={() => setIsFocused(false)}
         aria-invalid={hasError ? 'true' : 'false'}
+        style={{
+          width: '100%',
+          padding: unit ? '13px 72px 13px 16px' : '13px 16px',
+          fontSize: '15px',
+          fontFamily: 'var(--font-sans)',
+          fontWeight: 600,
+          color: 'var(--color-text)',
+          backgroundColor: isFocused
+            ? 'var(--color-surface)'
+            : isHovered
+            ? 'var(--color-surface-warm)'
+            : 'var(--color-surface)',
+          border: `1.5px solid ${
+            hasError
+              ? '#A0522D'
+              : isFocused
+              ? 'var(--color-sage)'
+              : isHovered
+              ? 'var(--color-sage)'
+              : 'var(--color-border)'
+          }`,
+          borderRadius: 'var(--radius-lg)',
+          outline: 'none',
+          boxShadow: isFocused
+            ? hasError
+              ? '0 0 0 3.5px rgba(160, 82, 45, 0.12)'
+              : '0 0 0 3.5px rgba(107, 143, 113, 0.18), 0 2px 8px rgba(107, 143, 113, 0.08)'
+            : isHovered
+            ? '0 2px 8px rgba(28, 28, 26, 0.05)'
+            : 'none',
+          transition: 'all 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
+          appearance: 'none',
+          MozAppearance: 'textfield',
+        }}
       />
       {unit && (
         <span
@@ -72,11 +99,16 @@ export function NumberInput({
             right: '12px',
             top: '50%',
             transform: 'translateY(-50%)',
-            fontSize: '12px',
-            fontWeight: 600,
-            color: 'var(--color-text-muted)',
+            fontSize: '11px',
+            fontWeight: 700,
+            color: isFocused ? 'var(--color-sage-dark)' : 'var(--color-text-muted)',
+            backgroundColor: isFocused ? 'var(--color-sage-light)' : 'var(--color-bg-alt)',
+            padding: '3px 7px',
+            borderRadius: 'var(--radius-sm)',
             pointerEvents: 'none',
-            letterSpacing: '0.03em',
+            letterSpacing: '0.04em',
+            textTransform: 'uppercase',
+            transition: 'all 0.2s ease',
           }}
         >
           {unit}
