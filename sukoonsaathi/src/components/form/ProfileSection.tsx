@@ -6,6 +6,8 @@ import type { StudentData, FormErrors } from '../../types';
 import { FormField } from './FormField';
 import { NumberInput } from './NumberInput';
 import { SegmentedControl } from './SegmentedControl';
+import { SelectInput } from './SelectInput';
+import { COUNTRY_OPTIONS } from '../../constants/countries';
 
 interface ProfileSectionProps {
   data: Partial<StudentData>;
@@ -92,42 +94,21 @@ export function ProfileSection({ data, errors, onChange }: ProfileSectionProps) 
           </FormField>
         </div>
 
-        {/* Country — full width */}
+        {/* Country — Select menu */}
         <FormField
           label="Country"
           htmlFor="country"
           error={errors.country}
-          helper="Enter your current country of study."
+          helper="Select your current country of study or residence."
           required
         >
-          <input
+          <SelectInput
             id="country"
-            type="text"
             value={data.country ?? ''}
-            onChange={e => onChange('country', e.target.value)}
-            placeholder="e.g. India"
-            style={{
-              width: '100%',
-              padding: '12px 14px',
-              fontSize: '15px',
-              fontFamily: 'var(--font-sans)',
-              fontWeight: 500,
-              color: 'var(--color-text)',
-              backgroundColor: 'var(--color-surface)',
-              border: `1.5px solid ${errors.country ? '#A0522D' : 'var(--color-border)'}`,
-              borderRadius: 'var(--radius-md)',
-              outline: 'none',
-              transition: 'border-color var(--transition-fast), box-shadow var(--transition-fast)',
-            }}
-            onFocus={e => {
-              e.currentTarget.style.borderColor = errors.country ? '#A0522D' : 'var(--color-sage)';
-              e.currentTarget.style.boxShadow = '0 0 0 3px rgba(107,143,113,0.15)';
-            }}
-            onBlur={e => {
-              e.currentTarget.style.borderColor = errors.country ? '#A0522D' : 'var(--color-border)';
-              e.currentTarget.style.boxShadow = 'none';
-            }}
-            aria-invalid={!!errors.country}
+            onChange={val => onChange('country', val)}
+            options={COUNTRY_OPTIONS}
+            placeholder="Select a country..."
+            hasError={!!errors.country}
           />
         </FormField>
       </div>
